@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="130"
+   height="80"
+   viewBox="0 0 130 80"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="bucket.svg">
+  <defs
+     id="defs4">
+    <inkscape:path-effect
+       effect="interpolate"
+       id="path-effect9607"
+       is_visible="true"
+       trajectory="M 0,0 0,0"
+       equidistant_spacing="true"
+       steps="5" />
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient4164"
+       osb:paint="gradient">
+      <stop
+         style="stop-color:#0000ff;stop-opacity:1;"
+         offset="0"
+         id="stop4166" />
+      <stop
+         style="stop-color:#0000ff;stop-opacity:0;"
+         offset="1"
+         id="stop4168" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.979899"
+     inkscape:cx="98.572583"
+     inkscape:cy="109.15647"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="1600"
+     inkscape:window-height="837"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-972.3622)"
+     style="display:inline">
+    <g
+       id="g9635"
+       transform="matrix(0.47393393,0,0,0.47393393,2.5426913,573.83748)">
+      <path
+         inkscape:label="Bucket Outside"
+         id="buc"
+         d="m 119.51121,857.54799 c -21.337722,25.30585 -44.316599,51.67517 -64.032901,75.94096 -1.921324,21.46019 11.926802,37.30833 24.362401,48.15671 13.543968,11.81528 26.60285,21.28624 51.53973,15.84345 20.15121,-23.38311 44.40317,-52.5796 64.07319,-75.90699 l -75.94246,-64.03415 z"
+         style="fill:#bdbeb5;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccscccc" />
+      <path
+         inkscape:label="Bucket Inside"
+         style="fill:#65686d;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 195.67688,921.33465 c -11.64688,13.81282 -38.14173,-3.80367 -51.95455,-15.45055 -13.81282,-11.64687 -35.65177,-34.78511 -24.00489,-48.59793 11.64687,-13.81281 38.14171,3.80368 51.95453,15.45056 13.81282,11.64687 35.65178,34.7851 24.00491,48.59792 z"
+         id="ket"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="sssss" />
+      <path
+         inkscape:path-effect="#path-effect9607"
+         inkscape:original-d="m 141.91894,899.41538 c 59.26956,0.40738 59.82796,10.65028 60.67065,37.57034 1.68538,53.84012 -21.093,71.33608 -30.79422,13.17184 -8.98029,-47.89298 -44.42396,-49.96882 -29.87643,-50.74218 z"
+         inkscape:label="ThaPaint"
+         sodipodi:nodetypes="cscc"
+         inkscape:connector-curvature="0"
+         id="paintthing"
+         d="m 141.91894,899.41538 c 59.26956,0.40738 59.82796,10.65028 60.67065,37.57034 1.68538,53.84012 -21.093,71.33608 -30.79422,13.17184 -8.98029,-47.89298 -44.42396,-49.96882 -29.87643,-50.74218 z"
+         style="opacity:1;fill:#f068d3;fill-opacity:1;fill-rule:evenodd;stroke:#00ff00;stroke-opacity:1" />
+    </g>
+  </g>
+</svg>

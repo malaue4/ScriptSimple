@@ -1,41 +1,54 @@
 public class Sheet {
   Rectangle rect;
-  Rectangle shadow;
   Rectangle parent;
+  PImage img;
   int resting_z;
   float z;
   color col;
-  public Sheet(int x, int y, int z, int width, int height) {
-    this.shadow = new Rectangle();
-    this.parent = new Rectangle(0,0,1000,600);
-    this.rect = new Rectangle(x, y, width, height);
+  public Sheet(float x, float y, float width, float height, float z) {
+    //this.shadow = new Rectangle();
+    this.rect = new Rectangle(int(x), int(y), int(width), int(height));
     this.z = z;
-    this.resting_z = z;
+    this.resting_z = int(z);
     this.col = color(64,64,185,127);
   }
   public void draw(){
-    //this.z = (this.z*8+this.resting_z*2)/10;
+    if(abs(z-resting_z) < 0.5) { 
+      this.z = resting_z;
+    } else {
+      this.z = (this.z*8+this.resting_z*2)/10;
+    }
+    // The background color
     rectMode(CORNER);
     fill(this.col); noStroke();
     rect(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
+    // If the img variable is set, then draw the image on the sheet
+    if(this.img != null) {
+      image(this.img, this.rect.x, this.rect.y, this.rect.width, this.rect.height);
+    }
   }
   void drawShadow(Rectangle area, int z){
+    if(z <= 0) {
+      return;
+    }
     int x, y, w, h;
     //area is where the shadow can be drawn.
-    //dz is the difference in z between this object
-    //and the on the shadow lands on.
-    this.shadow.setBounds(this.rect);
-    this.shadow = this.shadow.intersection(area);
-    if(this.shadow.isEmpty() == false){
-      x = this.shadow.x;
-      y = this.shadow.y;
-      w = this.shadow.width;
-      h = this.shadow.height;
+    //z is the difference in z between this object
+    //and the z of the object the shadow lands on.
+    Rectangle shadow = new Rectangle(this.rect);
+    //this.shadow.setBounds(this.rect);
+    shadow = shadow.intersection(area);
+    if(shadow.isEmpty() == false){
+      x = shadow.x;
+      y = shadow.y;
+      w = shadow.width;
+      h = shadow.height;
       float intensity = 32*32/(32+z*4);
       int r = 2+z*2;
       noStroke();
       
-      if(area.intersects(new Rectangle(this.rect.x-r, this.rect.y-r, r, r))){
+      shadow = new Rectangle(this.rect.x-r, this.rect.y-r, r, r);
+      if(area.intersects(shadow)){
         beginShape();
         texture(shade);
         vertex(x, y, 0, intensity);
@@ -46,7 +59,8 @@ public class Sheet {
         vertex(x, y-r, 0, 0);
         endShape();
       }
-      if(area.intersects(new Rectangle(this.rect.x+this.rect.width, this.rect.y-r, r, r))){
+      shadow = new Rectangle(this.rect.x+this.rect.width, this.rect.y-r, r, r);
+      if(area.intersects(shadow)){
         translate(x+w, y);
         rotate(PI*0.5);
         beginShape();
@@ -60,7 +74,8 @@ public class Sheet {
         endShape();
         resetMatrix();
       }
-      if(area.intersects(new Rectangle(this.rect.x+this.rect.width, this.rect.y+this.rect.height, r, r))){
+      shadow = new Rectangle(this.rect.x+this.rect.width, this.rect.y+this.rect.height, r, r);
+      if(area.intersects(shadow)){
         translate(x+w, y+h);
         rotate(PI);
         beginShape();
@@ -74,7 +89,8 @@ public class Sheet {
         endShape();
         resetMatrix();
       }
-      if(area.intersects(new Rectangle(this.rect.x-r, this.rect.y+this.rect.height, r, r))){
+      shadow = new Rectangle(this.rect.x-r, this.rect.y+this.rect.height, r, r);
+      if(area.intersects(shadow)){
         beginShape();
         texture(shade);
         vertex(x,         y+h,       0, intensity);
@@ -85,7 +101,8 @@ public class Sheet {
         vertex(x,         y+h+r,     0,  0);
         endShape();
       }
-      if(area.intersects(new Rectangle(this.rect.x, this.rect.y-r, this.rect.width, r))){
+      shadow = new Rectangle(this.rect.x, this.rect.y-r, this.rect.width, r);
+      if(area.intersects(shadow)){
         beginShape();
         texture(shade);
         vertex(x, y-r, 0, 0);
@@ -94,7 +111,8 @@ public class Sheet {
         vertex(x, y, 0, intensity);
         endShape();
       }
-      if(area.intersects(new Rectangle(this.rect.x+this.rect.width, this.rect.y-r, r, this.rect.height))){
+      shadow = new Rectangle(this.rect.x+this.rect.width, this.rect.y-r, r, this.rect.height);
+      if(area.intersects(shadow)){
         beginShape();
         texture(shade);
         vertex(x+w, y, 0, intensity);
@@ -103,7 +121,8 @@ public class Sheet {
         vertex(x+w, y+h, 0, intensity);
         endShape();
       }
-      if(area.intersects(new Rectangle(this.rect.x, this.rect.y, this.rect.width, r))){
+      shadow = new Rectangle(this.rect.x, this.rect.y+this.rect.height, this.rect.width, r);
+      if(area.intersects(shadow)){
         beginShape();
         texture(shade);
         vertex(x, y+h, 0, intensity);
@@ -112,7 +131,8 @@ public class Sheet {
         vertex(x, y+h+r, 0, 0);
         endShape();
       }
-      if(area.intersects(new Rectangle(this.rect.x-r, this.rect.y, r, this.rect.height))){
+      shadow = new Rectangle(this.rect.x-r, this.rect.y, r, this.rect.height);
+      if(area.intersects(shadow)){
         beginShape();
         texture(shade);
         vertex(x, y, 0, intensity);

@@ -3,24 +3,21 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 PFont f;
-Rectangle rect0, rect1, rect2, rectDel, rectCol0, rectCol1, rectCol2;
+Rectangle rect0, rect1, rect2, rectCol0, rectCol1, rectCol2;
 int EMaks = 35, ENu = 0;
-int w=1000, h=600;
+int w=1500, h=800;
 PImage shade;
-PImage gridImg;
-PImage bgKnapper;
+PShape shBucket;
+PShape shPaint;
 int trykX, trykY = 0;
 int cursorIndex = 0;
-int codeX = width-10;
-int codeY = 0;
 String code;
 int punkt = -1;
-int problem = 0;
-float problem_y = h;
+boolean codeShow = false;
 String kant = "";
 boolean tryk, traek, valgt = false, paint = false;
 Shape[] El = new Shape[EMaks];
-Shape Elo, None, Copy;
+Shape Elo, None, Copy; // The None variable is never set.
 int colorPicker = 0;
 color[] colors = {
  color(0), color(0,255,0), color(0,255,64), color(0,255,128), color(0,255,196), color(0,255,255), color(0,196,255), color(0,128,255), color(0,64,255), color(0,0,255)
@@ -31,48 +28,61 @@ color[] colors = {
 
 color fillCol;
 color strokeCol;
+float wobble = 0.5;
+float wobbleSpeed = 0;
 int timer = hour()*3600+minute()*60+second();
 
 Sheet root;
 Sheet ohSheet;
-Sheet ohSheet2;
-Sheet ohKnapper;
+Sheet ohCode;
+Sheet ohSidePanel;
+Sheet ohColor;
 Sheet ohPicker;
-int sheetsNum = 5;
-Sheet[] sheets = new Sheet[sheetsNum];
+int amount_of_sheets = 6; //remember to change this if sheets are added or removed
+Sheet[] sheets = new Sheet[amount_of_sheets];
 
 public void setup() {
+  // The window size is set
   size(w, h, P2D);
-  shade = createImage(32, 32, ARGB);
-  shade.loadPixels();
-  float step = 255.0/32.0;
-  for (int i = 0; i < shade.pixels.length; i++) {
-    shade.pixels[i] = color(0, int((i / shade.width)*step)); 
-  }
-  shade.updatePixels();
-  gridImg = loadImage("grid.png");
-  root = new Sheet(0,0,0,w,h);
-  ohSheet = new Sheet(180, 10, 2, 775, 580);
+  
+  // images are loaded/rendered into memory
+  shade = renderShade();
+  shBucket = loadShape("bucket.svg");
+  shPaint = shBucket.getChild("paintthing");
+  shPaint.disableStyle();
+  
+  // Sheet objects are instantiated
+  root = new Sheet(0,0,w,h,0);
+  ohSheet = new Sheet(180, 10, constrain(w-225, 775, max(w-400 , 775)), h-20, 2);
   ohSheet.col = color(196,255);
-  ohSheet2 = new Sheet(200, 100, 4, 100, 180);
-  ohKnapper = new Sheet(0, 0, 2, int(w*0.17), h);
-  ohKnapper.col = color(128,255);
-  ohPicker = new Sheet(0, 520, 4, int(w*0.16), 80);
+  ohSheet.img = loadImage("bgGrid.png");
+  ohCode = new Sheet(w, 0, w/2, h, 4);
+  ohColor = new Sheet(0, h-177, 170, 177, 2);
+  ohColor.img = loadImage("bgColorPicker.png");
+  ohSidePanel = new Sheet(0, 0, 170, h-ohColor.rect.height+1, 2);
+  ohSidePanel.img = loadImage("bg_knapper2.png");
+  ohPicker = new Sheet(0, h-80, 160, 80, 4);
   ohPicker.col = color(255,255);
-  sheets[0] = root; sheets[2] = ohSheet; sheets[3] = ohSheet2;
-  sheets[1] = ohKnapper; sheets[4] = ohPicker;
-  bgKnapper = loadImage("bg_knapper2.png");
+  
+  // They are then added to an array for access in for loop
+  sheets[0] = root; sheets[2] = ohSheet; sheets[3] = ohCode;
+  sheets[1] = ohSidePanel; sheets[4] = ohColor; sheets[5] = ohPicker;
+  
+  // The rectangles are instatiated
+  rect0 = new Rectangle(0, 0, 170, ohSidePanel.rect.height/3);
+  rect1 = new Rectangle(0, 1*ohSidePanel.rect.height/3, 170, ohSidePanel.rect.height/3);
+  rect2 = new Rectangle(0, 2*ohSidePanel.rect.height/3, 170, ohSidePanel.rect.height/3);
+  rectCol0 = new Rectangle(ohColor.rect.x+20, ohColor.rect.y+12, 130, 80);
+  rectCol1 = new Rectangle(ohColor.rect.x+21, ohColor.rect.y+105, 58, 35);
+  rectCol2 = new Rectangle(ohColor.rect.x+91, ohColor.rect.y+105, 58, 35);
+  
+  // The default fill and stroke colors for the Shape objects is set
   fillCol = color(255, 255, 255, 255);
   strokeCol = color(0, 0, 0, 255);
+  
+  // The font is loaded and applied
   f = createFont("Arial", 21, true);
   textFont(f, 21);
-  rect0 = new Rectangle(0, 0, int(w*0.17), int(h*0.235));
-  rect1 = new Rectangle(0, int(h*0.235), int(w*0.17), int(h*0.235));
-  rect2 = new Rectangle(0, int(h*0.470), int(w*0.17), int(h*0.235));
-  rectDel = new Rectangle(0,0, int(w*0.170), h);
-  rectCol0 = new Rectangle(int(w*0.019), int(h*0.723), int(w*0.138), int(h*0.139));
-  rectCol1 = new Rectangle(int(w*0.022), int(h*0.88), int(w*0.055), int(h*0.063));
-  rectCol2 = new Rectangle(int(w*0.101), int(h*0.88), int(w*0.055), int(h*0.063));
 }
 
 public void mousePressed() {
@@ -121,24 +131,23 @@ public void mousePressed() {
   } else if (rectCol0.contains(mouseX, mouseY)) {
     paint = true;
   } else {
-    Shape tempElo = None;
-    for (int i = 0; i < ENu; i++) {
+    for (int i = ENu-1; i >= 0; i--) {
       if ( El[i].isInside(mouseX, mouseY) ) {
-        tempElo = El[i];
+        Elo = El[i];
         trykX = El[i].posX - mouseX;
         trykY = El[i].posY - mouseY;
         traek = true;
-        kant = tempElo.atEdge(mouseX, mouseY, false);
-        punkt = tempElo.atVertex(mouseX, mouseY, false);
+        kant = Elo.atEdge(mouseX, mouseY, false);
+        punkt = Elo.atVertex(mouseX, mouseY, false);
+        break;
       }
     }
-    Elo = tempElo;
   }
   valgt = traek;
 }
 
 public void mouseReleased() {
-  if (rectDel.contains(mouseX, mouseY)) {
+  if (!ohSheet.rect.contains(mouseX, mouseY)) {
     if (traek) {
       //reorder list, if the shape removed was in the middle
       removeShape(Elo);
@@ -146,11 +155,14 @@ public void mouseReleased() {
       valgt = false;
     }
   }
+  // If we are holding a glob of paint...
   if(paint){
-    for(int i=0; i<ENu; i++){
+    // Then find the top most shape and paint it!
+    for(int i=ENu-1; i>=0; i--){
       if(El[i].isInside(mouseX, mouseY)){
         El[i].fillColor = fillCol;
         El[i].strokeColor = strokeCol;
+        break;
       }
     }
     paint = false;
@@ -180,7 +192,7 @@ public void keyPressed(KeyEvent ke){
       println("Koden er i udklipsholderen");
     }
     if(key == TAB){
-      problem = 1 - problem;
+      codeShow = !codeShow;
     }
     if(valgt){
       if(key == DELETE){
@@ -214,11 +226,7 @@ public void keyPressed(KeyEvent ke){
 }
 
 public void mouseWheel(MouseEvent event){
-  if (mouseX > codeX-25) {
-    int codeHeight = 1;
-    for(char c : code.toCharArray()) {
-      if(c=='\n') { codeHeight++; }
-    }
-    codeY = constrain(codeY+event.getCount()*5, 0, max(0, codeHeight*32-height));
+  if (mouseX > ohCode.rect.x) {
+    ohCode.rect.y = constrain(ohCode.rect.y-event.getCount()*5, min(0, height-ohCode.rect.height), 0);
   }
 }
