@@ -236,10 +236,13 @@ public class Shape {
 
   public void setWidth(int x, String edge) {
     if (this.type == 2) {
+      int mid = -1;
       if (edge.equals("l") || edge.equals("lt")  || edge.equals("lb") ) {
         for(int i=0; i<this.vertexCount;i++){
           if(this.x[i] == min(this.x)){
             this.x[i] = x;
+          } else if(this.x[i] != max(this.x)){
+            mid = i;
           }
         }
       }
@@ -247,9 +250,12 @@ public class Shape {
         for(int i=0; i<this.vertexCount;i++){
           if(this.x[i] == max(this.x)){
             this.x[i] = x;
+          } else if(this.x[i] != min(this.x)){
+            mid = i;
           }
         }
       }
+      if(mid!=-1) this.x[mid] = int(min(this.x)+xMul*this.getWidth());
     } else {
       if (edge.equals("l") || edge.equals("lt")  || edge.equals("lb") ) {
         this.x[0] = min(x, this.x[1]-10);
@@ -263,10 +269,13 @@ public class Shape {
 
   public void setHeight(int y, String edge) {
     if (this.type == 2) {
+      int mid = -1;
       if (edge.equals("t") || edge.equals("lt")  || edge.equals("rt") ) {
         for(int i=0; i<this.vertexCount;i++){
           if(this.y[i] == min(this.y)){
             this.y[i] = y;
+          } else if(this.y[i] != max(this.y)){
+            mid = i;
           }
         }
       }
@@ -274,9 +283,12 @@ public class Shape {
         for(int i=0; i<this.vertexCount;i++){
           if(this.y[i] == max(this.y)){
             this.y[i] = y;
+          } else if(this.y[i] != min(this.y)){
+            mid = i;
           }
         }
       }
+      if(mid!=-1) this.y[mid] = int(min(this.y)+yMul*this.getHeight());
     } else {
       if (edge.equals("t") || edge.equals("lt")  || edge.equals("rt") ) {
         this.y[0] = min(y, this.y[1]-10);

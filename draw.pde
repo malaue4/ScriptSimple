@@ -151,7 +151,7 @@ public void draw() {
   if(paint){
     wobbleSpeed += (1-wobble)*0.1;
     wobbleSpeed = constrain(wobbleSpeed, -1, 1);
-    wobbleSpeed *= 0.97;
+    wobbleSpeed *= 0.94;
     wobble = constrain(wobble+wobbleSpeed+(-abs(pmouseX - mouseX) + abs(pmouseY - mouseY))/500.0, 0.25, 4);
     ellipseMode(CENTER);
     fill(fillCol);

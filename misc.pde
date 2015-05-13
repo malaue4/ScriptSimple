@@ -98,3 +98,18 @@ public int calculateCodeHeight(String code) {
   }
   return codeHeight*32;
 }
+
+public int getMid(int[] numbers){
+  boolean min=true, max=true;
+  int mid = 2;
+  for(int i=0; i<3; i++){
+    if(min && numbers[i] == min(numbers)){
+      min = false;
+    } else if(max && numbers[i] == max(numbers)){
+      max = false;
+    } else {
+      mid = i;
+    }
+  }
+  return numbers[mid];
+}

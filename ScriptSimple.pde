@@ -16,8 +16,9 @@ int punkt = -1;
 boolean codeShow = false;
 String kant = "";
 boolean tryk, traek, valgt = false, paint = false;
+float xMul, yMul;
 Shape[] El = new Shape[EMaks];
-Shape Elo, None, Copy; // The None variable is never set.
+Shape Elo, None, Copy; // The None variable is never set. As it shouldn't be.
 int colorPicker = 0;
 color[] colors = {
  color(0), color(0,255,0), color(0,255,64), color(0,255,128), color(0,255,196), color(0,255,255), color(0,196,255), color(0,128,255), color(0,64,255), color(0,0,255)
@@ -139,6 +140,14 @@ public void mousePressed() {
         traek = true;
         kant = Elo.atEdge(mouseX, mouseY, false);
         punkt = Elo.atVertex(mouseX, mouseY, false);
+        if(Elo.type == 2 && !kant.equals("")){
+          if(Elo.getWidth() == 0){ xMul = 0.5; } else {
+            xMul = (getMid(Elo.x)-min(Elo.x))/float(Elo.getWidth());
+          }
+          if(Elo.getHeight() == 0){ yMul = 0.5; } else {
+            yMul = (getMid(Elo.y)-min(Elo.y))/float(Elo.getHeight());
+          }
+        }
         break;
       }
     }
