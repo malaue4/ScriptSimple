@@ -2,10 +2,10 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-PFont f;
+PFont codeFont;
 Rectangle rect0, rect1, rect2, rectCol0, rectCol1, rectCol2;
 int EMaks = 35, ENu = 0;
-int w=1500, h=800;
+int w=1000, h=600;
 PImage shade;
 PShape shBucket;
 PShape shPaint;
@@ -49,12 +49,14 @@ public void setup() {
   // images are loaded/rendered into memory
   shade = renderShade();
   shBucket = loadShape("bucket.svg");
+  // the paint part of the bucket ctor graphic is kept separatly,
   shPaint = shBucket.getChild("paintthing");
+  // and this line makes the fill() and stroke() colors be used instead of the picture's own colors. 
   shPaint.disableStyle();
-  
+
   // Sheet objects are instantiated
   root = new Sheet(0,0,w,h,0);
-  ohSheet = new Sheet(180, 10, constrain(w-225, 775, max(w-400 , 775)), h-20, 2);
+  ohSheet = new Sheet(180, 10, 775+max(0, w-180-775-480), h-20, 2);
   ohSheet.col = color(196,255);
   ohSheet.img = loadImage("bgGrid.png");
   ohCode = new Sheet(w, 0, w/2, h, 4);
@@ -82,8 +84,8 @@ public void setup() {
   strokeCol = color(0, 0, 0, 255);
   
   // The font is loaded and applied
-  f = createFont("Arial", 21, true);
-  textFont(f, 21);
+  codeFont = createFont("Arial", 21, true);
+  textFont(codeFont);
 }
 
 public void mousePressed() {
