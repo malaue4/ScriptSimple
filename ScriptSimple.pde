@@ -5,7 +5,7 @@ import java.awt.datatransfer.StringSelection;
 PFont codeFont;
 Rectangle rect0, rect1, rect2, rectCol0, rectCol1, rectCol2;
 int EMaks = 35, ENu = 0;
-int w=1000, h=600;
+int w=1400, h=600;
 PImage shade;
 PShape shBucket;
 PShape shPaint;
@@ -58,7 +58,7 @@ public void setup() {
   root = new Sheet(0,0,w,h,0);
   ohSheet = new Sheet(180, 10, 775+max(0, w-180-775-480), h-20, 2);
   ohSheet.col = color(196,255);
-  ohSheet.img = loadImage("bgGrid.png");
+  ohSheet.img = loadImage("bgGrid.png").get(0, 0, ohSheet.rect.width, ohSheet.rect.height);
   ohCode = new Sheet(w, 0, w/2, h, 4);
   ohColor = new Sheet(0, h-177, 170, 177, 2);
   ohColor.img = loadImage("bgColorPicker.png");
@@ -93,17 +93,16 @@ public void mousePressed() {
     if (!ohPicker.rect.contains(mouseX, mouseY)){ // If the user clicked outside the color palette window...
       colorPicker = 0; // close the color palette window.
     } else {
-      int colorIndex;
-      colorIndex = (mouseX-ohPicker.rect.x)/16 + 
-      (mouseY-ohPicker.rect.y)/16*10; // Find the cell
-      println(mx, my, mx+10*my);
+      int colorIndex;                              // Find the index of the color that was pressed.
+      colorIndex = (mouseX-ohPicker.rect.x)/16 +   // The 16 is the width and height of each cell, 
+                   (mouseY-ohPicker.rect.y)/16*10; // and the 10 is the amount of cells per row.
       if (colorPicker == 1){
-        fillCol = colors[mx+10*my];
+        fillCol = colors[colorIndex];
       } else {
-        strokeCol = colors[mx+10*my];
+        strokeCol = colors[colorIndex];
       }
     }
-  } else {
+  } else { // The color palette window wasn't open.
     if (rectCol0.contains(mouseX, mouseY)) {
       paint = true; // The color bucket was pressed.
     } else if (rectCol1.contains(mouseX, mouseY)){
