@@ -63,12 +63,20 @@ void ohSidePanelDraw(){
   strokeWeight(1);
   stroke(#000000);
   if (rect0.contains(mouseX, mouseY)) {
-    rect(rect0.x, rect0.y, rect0.width, rect0.height);
+    rect(rect0.x+2, rect0.y+2, rect0.width-5, rect0.height-5);
   } else if (rect1.contains(mouseX, mouseY)) {
-    rect(rect1.x, rect1.y, rect1.width, rect1.height);
+    rect(rect1.x+2, rect1.y+1, rect1.width-5, rect1.height-4);
   } else if (rect2.contains(mouseX, mouseY)) {
-    rect(rect2.x, rect2.y, rect2.width, rect2.height);
+    rect(rect2.x+2, rect2.y+1, rect2.width-5, rect2.height-4);
   }
+  // draws the shapes that will be pulled out. With appropriate colors.
+  fill(fillCol); stroke(strokeCol);
+  ellipseMode(CENTER);
+  ellipse(rect0.x+rect0.width/2, rect0.y+rect0.height/2, 100, 100);
+  rectMode(CENTER);
+  rect(rect1.x+rect1.width/2, rect1.y+rect1.height/2, 100, 100);
+  int tx = rect2.x+rect2.width/2; int ty = rect2.y+rect2.height/2;
+  triangle(tx-50, ty+50, tx, ty-50, tx+50, ty+50);
 }
 void ohColorDraw(){
   // the example color thing

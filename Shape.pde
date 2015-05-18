@@ -52,9 +52,11 @@ public class Shape {
       this.x[2], this.y[2]);
       break;
     }
+    fill(255, 32); noStroke();
+    rectMode(CENTER);
+    rect(mean(this.x), mean(this.y), 28, 32);
     fill(0);
     textAlign(CENTER, CENTER);
-    
     text(label, mean(this.x), mean(this.y));
   }
   

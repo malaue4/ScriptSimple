@@ -62,7 +62,7 @@ public void setup() {
   ohCode = new Sheet(w, 0, w/2, h, 4);
   ohColor = new Sheet(0, h-177, 170, 177, 2);
   ohColor.img = loadImage("bgColorPicker.png");
-  ohSidePanel = new Sheet(0, 0, 170, h-ohColor.rect.height+1, 2);
+  ohSidePanel = new Sheet(0, 0, 170, h-ohColor.rect.height, 2);
   ohSidePanel.img = loadImage("bg_knapper2.png");
   ohPicker = new Sheet(0, h-80, 160, 80, 4);
   ohPicker.col = color(255,255);
@@ -89,13 +89,13 @@ public void setup() {
 }
 
 public void mousePressed() {
-  if (colorPicker > 0){
-    if (!ohPicker.rect.contains(mouseX, mouseY)){
-      colorPicker = 0;
+  if (colorPicker > 0){ // If the color palette window is open.
+    if (!ohPicker.rect.contains(mouseX, mouseY)){ // If the user clicked outside the color palette window...
+      colorPicker = 0; // close the color palette window.
     } else {
-      int mx,my;
-      mx = (mouseX-ohPicker.rect.x)/16;
-      my = (mouseY-ohPicker.rect.y)/16;
+      int colorIndex;
+      colorIndex = (mouseX-ohPicker.rect.x)/16 + 
+      (mouseY-ohPicker.rect.y)/16*10; // Find the cell
       println(mx, my, mx+10*my);
       if (colorPicker == 1){
         fillCol = colors[mx+10*my];
@@ -104,11 +104,12 @@ public void mousePressed() {
       }
     }
   } else {
-    if (rectCol1.contains(mouseX, mouseY)){
-      colorPicker = 1;
-    }
-    if (rectCol2.contains(mouseX, mouseY)){
-      colorPicker = 2;
+    if (rectCol0.contains(mouseX, mouseY)) {
+      paint = true; // The color bucket was pressed.
+    } else if (rectCol1.contains(mouseX, mouseY)){
+      colorPicker = 1; // The fill color picker was pressed.
+    } else if (rectCol2.contains(mouseX, mouseY)){
+      colorPicker = 2; // The stroke color picker was pressed.
     }
   }
   boolean new_Elo = false;
@@ -131,8 +132,6 @@ public void mousePressed() {
     trykX = 0; 
     trykY = 0;
     traek = true;
-  } else if (rectCol0.contains(mouseX, mouseY)) {
-    paint = true;
   } else {
     for (int i = ENu-1; i >= 0; i--) {
       if ( El[i].isInside(mouseX, mouseY) ) {
@@ -190,9 +189,11 @@ public void keyPressed(KeyEvent ke){
       copyShape(Elo);
     }
     if(char(keyCode) == 'V' && Copy != None){
+      if(ENu < EMaks){
       println("pasta");
       Elo = pasteShape();
       valgt = true;
+      } else { println("PASTA OVERWHELMING D:"); }
     }
   } else {
     if(key == ENTER){
@@ -200,7 +201,7 @@ public void keyPressed(KeyEvent ke){
       Clipboard clipboard = toolkit.getSystemClipboard();
       StringSelection strSel = new StringSelection(generateCode());
       clipboard.setContents(strSel, null);
-      println("Koden er i udklipsholderen");
+      println("Koden er i udklipsholderen, men den bliver måske slettet hvis du lukker programmet.");
     }
     if(key == TAB){
       codeShow = !codeShow;
