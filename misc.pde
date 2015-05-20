@@ -1,19 +1,19 @@
 public String generateCode(){
   color stroke, fill;
-  stroke = color(0, 0, 0);
-  fill = color(255, 255, 255);
+  stroke = color(0,0,0);
+  fill = color(255,255,255);
   String output = "void setup(){\n  size("+ohSheet.rect.width+", "+ohSheet.rect.height+");\n}\n\nvoid draw(){\n";
   int x, y;
   x = ohSheet.rect.x; 
   y = ohSheet.rect.y;
   for (int i = 0; i < ENu; i++) {
-    if(El[i].strokeColor != stroke){
+    if(El[i].strokeColor != stroke || i == 0){
       stroke = El[i].strokeColor;
       output = output + "  stroke(" + (stroke >> 16 & 0xFF) + ", "+
                                       (stroke >> 8 & 0xFF )+ ", " +
                                       (stroke & 0xFF)+ ");\n";
     }
-    if(El[i].fillColor != fill){
+    if(El[i].fillColor != fill || i == 0){
       fill = El[i].fillColor;
       output = output + "  fill(" + (fill >> 16 & 0xFF) + ", "+
                                       (fill >> 8 & 0xFF )+ ", " +
@@ -112,4 +112,18 @@ public int getMid(int[] numbers){
     }
   }
   return numbers[mid];
+}
+
+public color[] makeRainbow(){
+  float cx, cy, r, g, b; color[] rainbow = new color[65];
+  for(int j=0; j<65; j++){
+    cx = j%13-1; cy = j/13+1;
+    if(cx == -1) {
+      rainbow[j] = color(min(255, (cy-1)*64), 255);
+    } else {
+      r = min(max(0, 4-cx, cx-8)*90, 255)*cy/2.5; g = min(max(0, cx-max(0, 2*(cx-4)))*90, 255)*cy/2.5; b = min(max(0, cx-4-max(0, 2*(cx-8)))*90, 255)*cy/2.5;
+      rainbow[j] = color(r,g,b);
+    }
+  }
+  return rainbow;
 }

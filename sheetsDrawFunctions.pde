@@ -4,15 +4,15 @@ void ohSheetDraw(){
   int x0, y0, x1, y1;
   x0 = ohSheet.rect.x; y0 = ohSheet.rect.y;
   x1 = x0 + ohSheet.rect.width-5; y1 = y0 + ohSheet.rect.height-5;
-  stroke(0, 0, 196);
-  fill(0, 0, 196);
+  stroke(xColor);
+  fill(xColor);
   strokeWeight(2);
   line(x0, y0, x1, y0);
   triangle(x1, y0, x1+4, y0, x1, y0+4);
   text('x', x1-10, y0);
   // the y-axis
-  stroke(196,0,0);
-  fill(196,0,0);
+  stroke(yColor);
+  fill(yColor);
   line(x0, y0, x0, y1);
   triangle(x0, y1, x0+4, y1, x0, y1+4);
   text('y', x0+3, y1-26);
@@ -43,13 +43,16 @@ void ohSheetDraw(){
 }
 void ohCodeDraw(){
   // Generate the code string
-  code = generateCode();
+  StringList code = generateCodeTagged();
   // Adjust the size of ohCode, so it fits the code.
-  ohCode.rect.height = calculateCodeHeight(code)+20;
+  //ohCode.rect.height = calculateCodeHeight(code)+20;
+  ohCode.rect.height = code.size()*fontSize+20;
   // Draw the code string
   textAlign(LEFT, TOP);
-  fill(0);
-  text(code, ohCode.rect.x+10, ohCode.rect.y+10);
+  drawCode(code, ohCode.rect.x+10, ohCode.rect.y+10, fontSize);
+  textFont(codeFont);
+  /*fill(0);
+  text(code, ohCode.rect.x+10, ohCode.rect.y+10);*/
   // Slide the code sheet out, TAB has been pressed or the mouse is over it.
   if (codeShow || mouseX > ohCode.rect.x) {
     ohCode.rect.x = (ohCode.rect.x+min(ohSheet.rect.x+ohSheet.rect.width+10, w-470))/2;
@@ -57,6 +60,7 @@ void ohCodeDraw(){
     ohCode.rect.x = (ohCode.rect.x+ohSheet.rect.x+ohSheet.rect.width+10)/2;
   }
 }
+
 void ohSidePanelDraw(){
   // Draws a border around the clickable areas, if the mouse hovers over them.
   noFill();
@@ -120,7 +124,7 @@ void ohPickerDraw(){
   // Draws all the pretty colors!
   for (color c : colors){
     fill(c);
-    rect(ohPicker.rect.x+16*(j%10), ohPicker.rect.y+16*(j/10), 16, 16);
+    rect(ohPicker.rect.x+12*(j%13), ohPicker.rect.y+16*(j/13), 12, 16);
     j++;
   }
 }

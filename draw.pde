@@ -52,6 +52,7 @@ public void draw() {
     ellipse(mouseX, mouseY, 30*wobble, 30/wobble);
   }
   
+  Hud.draw();
   // Actually change the mouse cursor
   cursor(cursorIndex);
 }

@@ -2,10 +2,12 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+int fontSize;
 PFont codeFont;
+PFont codeFontPlain, codeFontBold;
 Rectangle rect0, rect1, rect2, rectCol0, rectCol1, rectCol2;
 int EMaks = 35, ENu = 0;
-int w=1400, h=600;
+int w=1200, h=600;
 PImage shade;
 PShape shBucket;
 PShape shPaint;
@@ -20,15 +22,18 @@ float xMul, yMul;
 Shape[] El = new Shape[EMaks];
 Shape Elo, None, Copy; // The None variable is never set. As it shouldn't be.
 int colorPicker = 0;
-color[] colors = {
+color[] colors = new color[65];
+/*{
  color(0), color(0,255,0), color(0,255,64), color(0,255,128), color(0,255,196), color(0,255,255), color(0,196,255), color(0,128,255), color(0,64,255), color(0,0,255)
 ,color(64), color(64,196,0), color(64,196,64), color(64,196,128), color(64,196,196), color(64,196,255), color(48,147,196), color(32,98,196), color(16,49,196), color(0,0,196)
 ,color(128), color(128,128,0), color(128,128,64), color(128,128,128), color(128,128,196), color(128,128,255), color(96,96,128), color(64,64,128), color(32,32,128), color(0,0,128)
 ,color(196), color(196,64,0), color(196,64,64), color(196,64,128), color(196,64,196), color(196,64,255), color(147,48,64), color(98,32,64), color(49,16,64), color(0,0,64)
-,color(255), color(255,0,0), color(255,0,64), color(255,0,128), color(255,0,196), color(255,0,255), color(196,0,0), color(128,0,0), color(64,0,0), color(0,0,0)};
+,color(255), color(255,0,0), color(255,0,64), color(255,0,128), color(255,0,196), color(255,0,255), color(196,0,0), color(128,0,0), color(64,0,0), color(0,0,0)};*/
 
 color fillCol;
 color strokeCol;
+color xColor = color(255, 64, 0);
+color yColor = color(0, 64, 255);
 float wobble = 0.5;
 float wobbleSpeed = 0;
 int timer = hour()*3600+minute()*60+second();
@@ -41,6 +46,8 @@ Sheet ohColor;
 Sheet ohPicker;
 int amount_of_sheets = 6; //remember to change this if sheets are added or removed
 Sheet[] sheets = new Sheet[amount_of_sheets];
+
+HUD Hud;
 
 public void setup() {
   // The window size is set
@@ -60,11 +67,12 @@ public void setup() {
   ohSheet.col = color(196,255);
   ohSheet.img = loadImage("bgGrid.png").get(0, 0, ohSheet.rect.width, ohSheet.rect.height);
   ohCode = new Sheet(w, 0, w/2, h, 4);
+  ohCode.col = color(255, 192);
   ohColor = new Sheet(0, h-177, 170, 177, 2);
   ohColor.img = loadImage("bgColorPicker.png");
   ohSidePanel = new Sheet(0, 0, 170, h-ohColor.rect.height, 2);
   ohSidePanel.img = loadImage("bg_knapper2.png");
-  ohPicker = new Sheet(0, h-80, 160, 80, 4);
+  ohPicker = new Sheet(0, h-80, 156, 80, 4);
   ohPicker.col = color(255,255);
   
   // They are then added to an array for access in for loop
@@ -83,9 +91,18 @@ public void setup() {
   fillCol = color(255, 255, 255, 255);
   strokeCol = color(0, 0, 0, 255);
   
+  // Colors
+  colors = makeRainbow();
+  
   // The font is loaded and applied
-  codeFont = createFont("Arial", 21, true);
-  textFont(codeFont);
+  fontSize = 18;
+  codeFontPlain = createFont("Source Code Pro", fontSize);
+  codeFontBold = createFont("Source Code Pro Bold", fontSize);
+  codeFont = createFont("Arial", fontSize);
+  
+  // HUD used for showing messages
+  Hud = new HUD(codeFontPlain, fontSize);
+  
 }
 
 public void mousePressed() {
@@ -94,8 +111,8 @@ public void mousePressed() {
       colorPicker = 0; // close the color palette window.
     } else {
       int colorIndex;                              // Find the index of the color that was pressed.
-      colorIndex = (mouseX-ohPicker.rect.x)/16 +   // The 16 is the width and height of each cell, 
-                   (mouseY-ohPicker.rect.y)/16*10; // and the 10 is the amount of cells per row.
+      colorIndex = (mouseX-ohPicker.rect.x)/12 +   // The 12 is the width and 16 is height of each cell, 
+                   (mouseY-ohPicker.rect.y)/16*13; // and the 13 is the amount of cells per row.
       if (colorPicker == 1){
         fillCol = colors[colorIndex];
       } else {
@@ -186,12 +203,17 @@ public void keyPressed(KeyEvent ke){
     if(char(keyCode) == 'C' && valgt){
       println("copy");
       copyShape(Elo);
-    }
-    if(char(keyCode) == 'V' && Copy != None){
+    } else if(char(keyCode) == 'X' && valgt){
+      println("SHING!");
+      copyShape(Elo);
+      removeShape(Elo);
+      valgt = false;
+      Elo = None;
+    } else if(char(keyCode) == 'V' && Copy != None){
       if(ENu < EMaks){
-      println("pasta");
-      Elo = pasteShape();
-      valgt = true;
+        println("pasta");
+        Elo = pasteShape();
+        valgt = true;
       } else { println("PASTA OVERWHELMING D:"); }
     }
   } else {
@@ -201,6 +223,7 @@ public void keyPressed(KeyEvent ke){
       StringSelection strSel = new StringSelection(generateCode());
       clipboard.setContents(strSel, null);
       println("Koden er i udklipsholderen, men den bliver måske slettet hvis du lukker programmet.");
+      Hud.addMessage("Koden er i udklipsholderen");
     }
     if(key == TAB){
       codeShow = !codeShow;
