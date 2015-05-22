@@ -52,7 +52,7 @@ HUD Hud;
 public void setup() {
   // The window size is set
   size(w, h, P2D);
-  
+  frame.setTitle("VKG");
   // images are loaded/rendered into memory
   shade = renderShade();
   shBucket = loadShape("bucket.svg");
