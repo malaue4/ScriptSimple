@@ -70,6 +70,8 @@ public class Shape {
   }
   
   public int atVertex(int x, int y, boolean draw) {
+    // funktionen finder ud af om x, y er i nærheden af et af figurens hjørner. Den retunerer indekset for det 
+    // sidste punkt den checker som er inden for fire pixels af punktet. Ellers -1. 
     for (int i=0; i<this.vertexCount; i++) {
       if (dist(this.x[i], this.y[i], x, y) <= 4) {
         if (draw) { 
@@ -97,13 +99,14 @@ public class Shape {
     stroke(0);
     rectMode(CORNERS);
     if (y1-3 < y && y < y2+3) {
-      //rect(120, y1-3, 1000, y2+3);
+      // er der blevet trykket på den venstre kant
       if (x < x1+3 && x1-3 < x) { 
         w = "l"; 
         if (draw) {
           rect(x1-3, y1-3, x1+3, y2+3);
         }
       }
+      // er der blevet trykket på den højre kant
       if (x < x2+3 && x2-3 < x) { 
         w = "r"; 
         if (draw) {
@@ -112,13 +115,14 @@ public class Shape {
       }
     }
     if (x1-3 < x && x < x2+3) {
-      //rect(x1-3, 0, x2+3, 1000);
+      // er der blevet trykket på den øverste kant
       if (y < y1+3 && y1-3 < y) { 
         h = "t"; 
         if (draw) {
           rect(x1-3, y1-3, x2+3, y1+3);
         }
       }
+      // er der blevet trykket på den nederste kant
       if (y < y2+3 && y2-3 < y) { 
         h = "b"; 
         if (draw) {
@@ -237,7 +241,7 @@ public class Shape {
   }
 
   public void setWidth(int x, String edge) {
-    if (this.type == 2) {
+    if (this.type == 2) { // hvis der er en trekant
       int mid = -1;
       if (edge.equals("l") || edge.equals("lt")  || edge.equals("lb") ) {
         for(int i=0; i<this.vertexCount;i++){
@@ -258,7 +262,7 @@ public class Shape {
         }
       }
       if(mid!=-1) this.x[mid] = int(min(this.x)+xMul*this.getWidth());
-    } else {
+    } else { // hvis det ikke er en trekant
       if (edge.equals("l") || edge.equals("lt")  || edge.equals("lb") ) {
         this.x[0] = min(x, this.x[1]-10);
       }

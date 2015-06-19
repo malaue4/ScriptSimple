@@ -36,7 +36,6 @@ public class Sheet {
     //z is the difference in z between this object
     //and the z of the object the shadow lands on.
     Rectangle shadow = new Rectangle(this.rect);
-    //this.shadow.setBounds(this.rect);
     shadow = shadow.intersection(area);
     if(shadow.isEmpty() == false){
       x = shadow.x;

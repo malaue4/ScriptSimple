@@ -3,12 +3,12 @@ public void draw() {
   //Det er her at figurenes form bliver ændret.
   //kant og punkt bliver indstillet i mousePressed() og mouseReleased() i ScriptSimple.pde
   if (mousePressed && traek == true) {
-    if (punkt >= 0) {
+    if (punkt >= 0) { // hvis fat i et punkt, flyt punkt
       Elo.setVertex(punkt, mouseX, mouseY);
-    } else if (kant.equals("")) {
+    } else if (kant.equals("")) { // hvis ikke fat i et kant, flyt Shape
       Elo.setPosX(mouseX + trykX);
       Elo.setPosY(mouseY + trykY);
-    } else {
+    } else { // hvis fat i et kant, flyt kant
       Elo.setWidth(mouseX, kant);
       Elo.setHeight(mouseY, kant);
     }
@@ -56,4 +56,3 @@ public void draw() {
   // Actually change the mouse cursor
   cursor(cursorIndex);
 }
-

@@ -18,8 +18,9 @@ int punkt = -1;
 boolean codeShow = false;
 String kant = "";
 boolean tryk, traek, valgt = false, paint = false;
+// De finder  den relative position af midtpunktet af en trekant, når den bliver skaleret
 float xMul, yMul;
-Shape[] El = new Shape[EMaks];
+Shape[] El = new Shape[EMaks]; // Array af alle de shapes der skal tegnes på skærmen
 Shape Elo, None, Copy; // The None variable is never set. As it shouldn't be.
 int colorPicker = 0;
 color[] colors = new color[65];
@@ -36,14 +37,14 @@ color xColor = color(255, 64, 0);
 color yColor = color(0, 64, 255);
 float wobble = 0.5;
 float wobbleSpeed = 0;
-int timer = hour()*3600+minute()*60+second();
+// int timer = hour()*3600+minute()*60+second(); // bruges ikke
 
-Sheet root;
-Sheet ohSheet;
-Sheet ohCode;
-Sheet ohSidePanel;
+Sheet root; // baggrunden
+Sheet ohSheet; // tegnebrøttet
+Sheet ohCode; // kodepanelet
+Sheet ohSidePanel; // Figurvælger
 Sheet ohColor;
-Sheet ohPicker;
+Sheet ohPicker; // farvepalletten
 int amount_of_sheets = 6; //remember to change this if sheets are added or removed
 Sheet[] sheets = new Sheet[amount_of_sheets];
 
@@ -54,14 +55,14 @@ public void setup() {
   size(w, h, P2D);
   frame.setTitle("VKG");
   // images are loaded/rendered into memory
-  shade = renderShade();
-  shBucket = loadShape("bucket.svg");
-  // the paint part of the bucket ctor graphic is kept separatly,
+  shade = renderShade(); // tegner en skygge som bliver struuket senere
+  shBucket = loadShape("bucket.svg"); 
+  // the paint part of the bucket vector graphic is kept separatly,
   shPaint = shBucket.getChild("paintthing");
   // and this line makes the fill() and stroke() colors be used instead of the picture's own colors. 
   shPaint.disableStyle();
 
-  // Sheet objects are instantiated
+  // Sheet objects are instantiated, ved .img bliver der indlæst baggrunds billeder, .col er baggrundsfarven
   root = new Sheet(0,0,w,h,0);
   ohSheet = new Sheet(180, 10, 775+max(0, w-180-775-480), h-20, 2);
   ohSheet.col = color(196,255);
@@ -79,7 +80,7 @@ public void setup() {
   sheets[0] = root; sheets[2] = ohSheet; sheets[3] = ohCode;
   sheets[1] = ohSidePanel; sheets[4] = ohColor; sheets[5] = ohPicker;
   
-  // The rectangles are instatiated
+  // The rectangles are instatiated/ placering af knapper
   rect0 = new Rectangle(0, 0, 170, ohSidePanel.rect.height/3);
   rect1 = new Rectangle(0, 1*ohSidePanel.rect.height/3, 170, ohSidePanel.rect.height/3);
   rect2 = new Rectangle(0, 2*ohSidePanel.rect.height/3, 170, ohSidePanel.rect.height/3);
@@ -94,7 +95,7 @@ public void setup() {
   // Colors
   colors = makeRainbow();
   
-  // The font is loaded and applied
+  // The font is loaded
   fontSize = 18;
   codeFontPlain = createFont("Source Code Pro", fontSize);
   codeFontBold = createFont("Source Code Pro Bold", fontSize);
@@ -155,8 +156,8 @@ public void mousePressed() {
         trykX = El[i].posX - mouseX;
         trykY = El[i].posY - mouseY;
         traek = true;
-        kant = Elo.atEdge(mouseX, mouseY, false);
-        punkt = Elo.atVertex(mouseX, mouseY, false);
+        kant = Elo.atEdge(mouseX, mouseY, false); // finder ud af hvilken kant der er blevet trykket på, hvis nogen
+        punkt = Elo.atVertex(mouseX, mouseY, false); // finder hvilket punkt i en trekant der er blevet trykket på
         if(Elo.type == 2 && !kant.equals("")){
           if(Elo.getWidth() == 0){ xMul = 0.5; } else {
             xMul = (getMid(Elo.x)-min(Elo.x))/float(Elo.getWidth());
@@ -173,9 +174,12 @@ public void mousePressed() {
 }
 
 public void mouseReleased() {
+  // hvis musen ikke er henover "tegnebrættet" ohSheet
   if (!ohSheet.rect.contains(mouseX, mouseY)) {
+    // og hvis der er en figur der bliver trukket
     if (traek) {
-      //reorder list, if the shape removed was in the middle
+      // så slet figuren og
+      // reorder list, if the shape removed was in the middle
       removeShape(Elo);
       Elo = None;
       valgt = false;
@@ -234,6 +238,7 @@ public void keyPressed(KeyEvent ke){
         valgt = false;
         Elo = None;
       }
+      // rykker figuren bagud i lag, dvs at den bliver tegnet tidligere
       if(char(keyCode) == 'O'){
         for(int i = 0; i < ENu; i++){
           if(El[i] == Elo){
@@ -244,7 +249,7 @@ public void keyPressed(KeyEvent ke){
             break;
           }
         }
-      }else if(char(keyCode) == 'L'){
+      }else if(char(keyCode) == 'L'){ // omvendt 
         for(int i = 0; i < ENu; i++){
           if(El[i] == Elo){
             if(i<ENu-1){
